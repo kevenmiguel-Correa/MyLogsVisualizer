@@ -11,8 +11,8 @@ namespace MyLogsVisualizer
     public class LogConverter
     {
         private static readonly Regex regex = new Regex(
-           @"\[(.*?) (.*?)\] (.*)",
-           RegexOptions.Compiled);
+    @"\[(\d{4}-\d{2}-\d{2}) (\d{2}:\d{2}:\d{2}) (\w{3})\] (.*)",
+    RegexOptions.Compiled);
 
         public static List<LogDto> Parse(string path)
         {
@@ -24,24 +24,22 @@ namespace MyLogsVisualizer
                 var match = regex.Match(line);
                 var rawLevel = match.Groups[2].Value;
 
-                // "00:00:24 WRN"
-                var parts = rawLevel.Split(' ');
-                var levelShort = parts.Last(); // WRN
-                var time = parts.First();      // 00:00:24
 
                 if (match.Success)
                 {
+                    var date = match.Groups[1].Value;
+                    var time = match.Groups[2].Value;
+                    var levelShort = match.Groups[3].Value;
                     result.Add(new LogDto
                     {
-                        Timestamp = match.Groups[1].Value,
+                        Timestamp = $"{date} {time}",
                         Level = ConvertLevel(levelShort),
-                        Message = match.Groups[3].Value,
+                        Message = match.Groups[4].Value,
                         RawLine = line
                     });
                 }
                 else
                 {
-                    // Si no matchea, lo agregamos crudo
                     result.Add(new LogDto
                     {
                         Timestamp = "",
@@ -61,7 +59,7 @@ namespace MyLogsVisualizer
             {
                 "INF" => "Information",
                 "WRN" => "Warning",
-                "ERR" => "Error",   
+                "ERR" => "Error",
                 "DBG" => "Debug",
                 _ => shortLevel
             };
