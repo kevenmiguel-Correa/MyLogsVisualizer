@@ -12,7 +12,7 @@
 
         <!-- Barra superior -->
         <StackPanel Orientation="Horizontal" Margin="0 0 0 10">
-            <Button Width="140" Height="32" Content="Cargar Log"
+            <Button Width="140" Height="32" Content="Cargar archivo de log"
                     Click="LoadLog_Click"
                     Background="#0078D4" Foreground="White"/>
 
@@ -21,64 +21,6 @@
                      TextChanged="SearchBox_TextChanged"/>
         </StackPanel>
 
-        <!-- Tabla -->
-        <!--<DataGrid x:Name="LogGrid"
-                  Grid.Row="1"
-                  AutoGenerateColumns="False"
-                  Background="#252525"
-                  Foreground="#252525">
-
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="Hora" Binding="{Binding Timestamp}" Width="150"/>
-                <DataGridTextColumn Header="Nivel" Binding="{Binding Level}" Width="120"/>
-                <DataGridTextColumn Header="Mensaje" Binding="{Binding Message}" Width="*"/>
-            </DataGrid.Columns>
-
-
-        </DataGrid>-->
-        <!--<DataGrid x:Name="LogGrid"
-          Grid.Row="1"
-          AutoGenerateColumns="False"
-          Background="#252525"
-          Foreground="White"
-          RowBackground="#252525"
-          AlternatingRowBackground="#252525"
-          GridLinesVisibility="None">
-            
-            <DataGrid.ColumnHeaderStyle>
-                <Style TargetType="DataGridColumnHeader">
-                    <Setter Property="Background" Value="#1e1e1e"/>
-                    <Setter Property="Foreground" Value="White"/>
-                    <Setter Property="BorderBrush" Value="#1e1e1e"/>
-                    <Setter Property="BorderThickness" Value="0"/>
-                    <Setter Property="FontWeight" Value="SemiBold"/>
-
-                    <Style.Triggers>
-                        <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Background" Value="#2a2a2a"/>
-                        </Trigger>
-                    </Style.Triggers>
-                </Style>
-            </DataGrid.ColumnHeaderStyle>
-            
-            <DataGrid.RowStyle>
-                <Style TargetType="DataGridRow">
-                    <Setter Property="Background" Value="#252525"/>
-                    <Setter Property="BorderThickness" Value="0"/>
-                </Style>
-            </DataGrid.RowStyle>
-
-            <DataGrid.Resources>
-                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="#444"/>
-            </DataGrid.Resources>
-
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="Hora" Binding="{Binding Timestamp}" Width="150"/>
-                <DataGridTextColumn Header="Nivel" Binding="{Binding Level}" Width="120"/>
-                <DataGridTextColumn Header="Mensaje" Binding="{Binding Message}" Width="*"/>
-            </DataGrid.Columns>
-
-        </DataGrid>-->
 
         <DataGrid x:Name="LogGrid"
           Grid.Row="1"
@@ -88,7 +30,9 @@
           RowBackground="#252525"
           AlternatingRowBackground="#252525"
           GridLinesVisibility="None"
-          BorderThickness="0">
+          BorderThickness="0"
+          IsReadOnly="True"
+          RowHeight="NaN">
 
             <!-- HEADER -->
             <DataGrid.ColumnHeaderStyle>
@@ -113,20 +57,19 @@
                 <Style TargetType="DataGridRow">
                     <Setter Property="Background" Value="#252525"/>
                     <Setter Property="BorderThickness" Value="0"/>
+                    <Setter Property="Height" Value="Auto"/>
                 </Style>
             </DataGrid.RowStyle>
 
-            <!-- SELECCIÓN -->
             <DataGrid.Resources>
                 <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="#3a3a3a"/>
             </DataGrid.Resources>
 
             <DataGrid.Columns>
 
-                <!-- FECHA -->
-                <DataGridTextColumn Header="Hora" Binding="{Binding Timestamp}" Width="150"/>
 
-                <!-- NIVEL (🔥 ESTILO PRO) -->
+                <DataGridTextColumn Header="Tiempo" Binding="{Binding Timestamp}" Width="170"/>
+
                 <DataGridTemplateColumn Header="Nivel" Width="140">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
@@ -144,17 +87,14 @@
 
                             <DataTemplate.Triggers>
 
-                                <!-- INFO -->
                                 <DataTrigger Binding="{Binding Level}" Value="Information">
                                     <Setter TargetName="Badge" Property="Background" Value="#1f3a5f"/>
                                 </DataTrigger>
 
-                                <!-- WARNING -->
                                 <DataTrigger Binding="{Binding Level}" Value="Warning">
                                     <Setter TargetName="Badge" Property="Background" Value="#5f4a1f"/>
                                 </DataTrigger>
 
-                                <!-- ERROR -->
                                 <DataTrigger Binding="{Binding Level}" Value="Error">
                                     <Setter TargetName="Badge" Property="Background" Value="#5f1f1f"/>
                                 </DataTrigger>
@@ -170,7 +110,22 @@
                 </DataGridTemplateColumn>
 
                 <!-- MENSAJE -->
-                <DataGridTextColumn Header="Mensaje" Binding="{Binding Message}" Width="*"/>
+                <!--<DataGridTextColumn Header="Mensaje" Binding="{Binding Message}" Width="*"/>-->
+                <DataGridTemplateColumn Header="Mensaje" Width="*">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBox Text="{Binding Message, Mode=OneWay}"
+                     TextWrapping="Wrap"
+                     Background="Transparent"
+                     Foreground="White"
+                     BorderThickness="0"
+                     IsReadOnly="True"
+                     Padding="4,2"
+                     FontSize="13"
+                     Style="{x:Null}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
 
             </DataGrid.Columns>
 
