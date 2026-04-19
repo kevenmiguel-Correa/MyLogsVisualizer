@@ -11,6 +11,7 @@
         </Grid.RowDefinitions>
 
         <!-- Barra superior -->
+        <!--
         <StackPanel Orientation="Horizontal" Margin="0 0 0 10">
             <Button Width="140" Height="32" Content="Cargar archivo de log"
                     Click="LoadLog_Click"
@@ -19,8 +20,33 @@
             <TextBox x:Name="SearchBox" Width="409" Height="32"
                      Margin="10 0 0 0" 
                      TextChanged="SearchBox_TextChanged"/>
-        </StackPanel>
+        </StackPanel>-->
+        <!-- Barra superior -->
+        <StackPanel Orientation="Horizontal" Margin="0 0 0 10">
+            <Button Width="140" Height="32" Content="Cargar Log"
+            ToolTip="Cargar un archivo de log para visualizar"
+            Click="LoadLog_Click"
+            Background="#0078D4" Foreground="White"/>
 
+            <TextBox x:Name="SearchBox" Width="309" Height="32"
+             Margin="10 0 0 0"
+             TextChanged="SearchBox_TextChanged"/>
+
+
+            <ComboBox x:Name="LevelFilter"
+              ToolTip="Filtrar por nivel de log"
+              Width="130" Height="32"
+              Margin="10 0 0 0"
+              Background="#252525"
+              Foreground="DimGray"
+              SelectionChanged="LevelFilter_SelectionChanged">
+                <ComboBoxItem Content="Todos" IsSelected="True"/>
+                <ComboBoxItem Content="Information"/>
+                <ComboBoxItem Content="Warning"/>
+                <ComboBoxItem Content="Error"/>
+                <ComboBoxItem Content="Debug"/>
+            </ComboBox>
+        </StackPanel>
 
         <DataGrid x:Name="LogGrid"
           Grid.Row="1"
