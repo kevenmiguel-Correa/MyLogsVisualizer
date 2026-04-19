@@ -32,20 +32,52 @@ namespace MyLogsVisualizer
             if (dialog.ShowDialog() == true)
             {
                 AllLogs = LogConverter.Parse(dialog.FileName);
-                LogGrid.ItemsSource = AllLogs;
+                ApplyFilter();
+                //LogGrid.ItemsSource = AllLogs;
             }
         }
 
         private void SearchBox_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
         {
-            var text = SearchBox.Text.ToLower();
+            //var text = SearchBox.Text.ToLower();
 
-            LogGrid.ItemsSource = AllLogs
-                .Where(x =>
+            //LogGrid.ItemsSource = AllLogs
+            //    .Where(x =>
+            //            (x.Message ?? "").ToLower().Contains(text) ||
+            //            (x.Level ?? "").ToLower().Contains(text) ||
+            //            (x.Timestamp ?? "").ToLower().Contains(text))
+            //    .ToList();
+            ApplyFilter();
+        }
+
+        private void LevelFilter_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ApplyFilter();
+        }
+
+        private void ApplyFilter()
+        {
+            if (AllLogs == null || !AllLogs.Any()) return;
+            string text = SearchBox.Text.ToLower();
+            string level = (LevelFilter.SelectedItem as ComboBoxItem)?.Content.ToString();
+
+            var filtered = AllLogs.AsEnumerable();
+
+            if (level != null && level != "Todos")
+            {
+                filtered = filtered.Where(l => l.Level == level);
+            }
+
+            if (!string.IsNullOrEmpty(text))
+            {
+                //LogGrid.ItemsSource = AllLogs
+                filtered = filtered.Where(x =>
                         (x.Message ?? "").ToLower().Contains(text) ||
                         (x.Level ?? "").ToLower().Contains(text) ||
                         (x.Timestamp ?? "").ToLower().Contains(text))
                 .ToList();
+            }
+            LogGrid.ItemsSource = filtered.ToList();
         }
     }
 }
